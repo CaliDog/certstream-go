@@ -10,7 +10,7 @@ var log = logging.MustGetLogger("example")
 func main() {
 	stream := certstream.CertStreamEventStream(false)
 
-	for jq := range stream{
+	for jq := range stream {
 
 		message_type, err := jq.String("message_type")
 

@@ -15,23 +15,29 @@ go get github.com/CaliDog/certstream-go
 `CertStreamEventStream` returns a channel with a [JsonQuery](https://godoc.org/github.com/jmoiron/jsonq#JsonQuery) structure, which makes working with the JSON returned from CertStream much easier to work with. 
 
 ```go
+package main
+
 import (
-   "github.com/op/go-logging"
+	"github.com/op/go-logging"
 	"github.com/CaliDog/certstream-go"
 )
 
 var log = logging.MustGetLogger("example")
 
 func main() {
-	stream := CertStreamEventStream(false)
+	stream := certstream.CertStreamEventStream(false)
 
-	for jq := range stream{
+	for jq := range stream {
+
 		message_type, err := jq.String("message_type")
+
 		if err != nil {
 			log.Fatalf("Error parsing message_type", err)
 		}
+
 		log.Info("Message type -> ", message_type)
 		log.Info("recv: ", jq)
+
 	}
 }
 ```
