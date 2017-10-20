@@ -4,9 +4,7 @@
     <p align="center">See SSL certs as they're issued live.</p>
 </p>
 
-# Certstream Go
-
-This is a library for interacting with the [certstream network](https://certstream.calidog.io/) to monitor an aggregated feed from a collection of [Certificate Transparency Lists](https://www.certificate-transparency.org/known-logs).
+**Certstream-go** is a library for interacting with the [certstream network](https://certstream.calidog.io/) to monitor an aggregated feed from a collection of [Certificate Transparency Lists](https://www.certificate-transparency.org/known-logs).
 
 It leverages the excellent [websocket](https://github.com/gorilla/websocket) and [jsonq](https://github.com/jmoiron/jsonq) libraries and supports reconnecting automatically. 
 
