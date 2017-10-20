@@ -1,3 +1,9 @@
+<p align="center">
+    <img align="center" src="https://user-images.githubusercontent.com/1072598/31840406-1fe37936-b59a-11e7-939a-71d36e584fc9.png">
+    <h3 align="center">CertStream</h3>
+    <p align="center">See SSL certs as they're issued live.</p>
+</p>
+
 # Certstream Go
 
 This is a library for interacting with the [certstream network](https://certstream.calidog.io/) to monitor an aggregated feed from a collection of [Certificate Transparency Lists](https://www.certificate-transparency.org/known-logs).
