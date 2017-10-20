@@ -18,28 +18,28 @@ go get github.com/CaliDog/certstream-go
 package main
 
 import (
-    "github.com/op/go-logging"
-    "github.com/CaliDog/certstream-go"
+	"github.com/op/go-logging"
+	"github.com/CaliDog/certstream-go"
 )
 
 var log = logging.MustGetLogger("example")
 
 func main() {
-    # Don't skip/filter heartbeat messages
-    stream := certstream.CertStreamEventStream(false)
+	# Don't skip/filter heartbeat messages
+	stream := certstream.CertStreamEventStream(false)
 
-    for jq := range stream {
+	for jq := range stream {
 
-        message_type, err := jq.String("message_type")
+		message_type, err := jq.String("message_type")
 
-        if err != nil {
-            log.Fatalf("Error parsing message_type", err)
-        }
+		if err != nil {
+			log.Fatalf("Error parsing message_type", err)
+		}
 
-        log.Info("Message type -> ", message_type)
-        log.Info("recv: ", jq)
+		log.Info("Message type -> ", message_type)
+		log.Info("recv: ", jq)
 
-    }
+	}
 }
 ```
 
