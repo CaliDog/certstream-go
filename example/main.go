@@ -8,18 +8,21 @@ import (
 var log = logging.MustGetLogger("example")
 
 func main() {
-	stream := certstream.CertStreamEventStream(false)
+	stream, errStream := certstream.CertStreamEventStream(false)
+	for {
+		select {
+			case jq := <-stream:
+				messageType, err := jq.String("message_type")
 
-	for jq := range stream {
+				if err != nil{
+					log.Fatal("Error decoding jq string")
+				}
 
-		message_type, err := jq.String("message_type")
-
-		if err != nil {
-			log.Fatalf("Error parsing message_type: %v", err)
+				log.Info("Message type -> ", messageType)
+				log.Info("recv: ", jq)
+      
+			case err := <-errStream:
+				log.Error(err)
 		}
-
-		log.Info("Message type -> ", message_type)
-		log.Info("recv: ", jq)
-
 	}
 }
