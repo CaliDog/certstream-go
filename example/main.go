@@ -15,7 +15,7 @@ func main() {
 		message_type, err := jq.String("message_type")
 
 		if err != nil {
-			log.Fatalf("Error parsing message_type", err)
+			log.Fatalf("Error parsing message_type: %v", err)
 		}
 
 		log.Info("Message type -> ", message_type)
