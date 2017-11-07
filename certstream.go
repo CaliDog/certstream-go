@@ -38,7 +38,7 @@ func CertStreamEventStream(skipHeartbeats bool) (chan jsonq.JsonQuery, chan erro
 					errStream <- errors.Wrap(err, "Error creating jq object!")
 				}
 
-				if (skipHeartbeats && res == "heartbeat"){
+				if skipHeartbeats && res == "heartbeat" {
 					continue
 				}
 

@@ -12,13 +12,13 @@ func main() {
 	for {
 		select {
 			case jq := <-stream:
-				message_type, err := jq.String("message_type")
+				messageType, err := jq.String("message_type")
 
 				if err != nil{
 					log.Fatal("Error decoding jq string")
 				}
 
-				log.Info("Message type -> ", message_type)
+				log.Info("Message type -> ", messageType)
 				log.Info("recv: ", jq)
       
 			case err := <-errStream:
