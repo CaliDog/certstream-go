@@ -27,7 +27,7 @@ func CertStreamEventStream(skipHeartbeats bool) chan jsonq.JsonQuery {
 				var v interface{}
 				err = c.ReadJSON(&v)
 				if err != nil {
-					log.Fatalf("Error decoding json frame!", err)
+					log.Fatalf("Error decoding json frame! %v\n", err)
 				}
 
 				log.Info(v)
@@ -36,7 +36,7 @@ func CertStreamEventStream(skipHeartbeats bool) chan jsonq.JsonQuery {
 
 				res, err := jq.String("message_type")
 				if err != nil {
-					log.Fatalf("Error creating jq!", err)
+					log.Fatalf("Error creating jq! %v\n", err)
 				}
 
 				if (skipHeartbeats && res == "heartbeat"){
