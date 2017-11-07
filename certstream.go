@@ -4,28 +4,19 @@ import (
 	"time"
 	"github.com/gorilla/websocket"
 	"github.com/jmoiron/jsonq"
+	"github.com/pkg/errors"
 )
 
-type CertstreamError struct {
-	errorCode string
-	errorString string
-	error *error
-}
-
-func CertStreamEventStream(skipHeartbeats bool) (chan jsonq.JsonQuery, chan CertstreamError) {
+func CertStreamEventStream(skipHeartbeats bool) (chan jsonq.JsonQuery, chan error) {
 	outputStream := make(chan jsonq.JsonQuery)
-	errStream := make(chan CertstreamError)
+	errStream := make(chan error)
 
 	go func() {
 		for {
 			c, _, err := websocket.DefaultDialer.Dial("wss://certstream.calidog.io", nil)
 
 			if err != nil {
-				errStream <- CertstreamError{
-					"CONNECTION_ERROR",
-					"Error connecting to certstream! Sleeping a few seconds and reconnecting... ",
-					&err,
-				}
+				errStream <- errors.Wrap(err, "Error connecting to certstream! Sleeping a few seconds and reconnecting... ")
 				time.Sleep(5 * time.Second)
 				continue
 			}
@@ -37,22 +28,14 @@ func CertStreamEventStream(skipHeartbeats bool) (chan jsonq.JsonQuery, chan Cert
 				var v interface{}
 				err = c.ReadJSON(&v)
 				if err != nil {
-					errStream <- CertstreamError{
-						"JSON_DECODE_ERROR",
-						"Error decoding json frame!",
-						&err,
-					}
+					errStream <- errors.Wrap(err, "Error decoding json frame!")
 				}
 
 				jq := jsonq.NewQuery(v)
 
 				res, err := jq.String("message_type")
 				if err != nil {
-					errStream <- CertstreamError{
-						"JQ_ERROR",
-						"Error creating jq object!",
-						&err,
-					}
+					errStream <- errors.Wrap(err, "Error creating jq object!")
 				}
 
 				if (skipHeartbeats && res == "heartbeat"){
