@@ -30,8 +30,6 @@ func CertStreamEventStream(skipHeartbeats bool) chan jsonq.JsonQuery {
 					log.Fatalf("Error decoding json frame! %v\n", err)
 				}
 
-				log.Info(v)
-
 				jq := jsonq.NewQuery(v)
 
 				res, err := jq.String("message_type")
