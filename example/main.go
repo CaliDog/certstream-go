@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/op/go-logging"
 	"github.com/CaliDog/certstream-go"
+	logging "github.com/op/go-logging"
 )
 
 var log = logging.MustGetLogger("example")
@@ -20,10 +20,9 @@ func main() {
 
 				log.Info("Message type -> ", message_type)
 				log.Info("recv: ", jq)
-
+      
 			case err := <-errStream:
 				log.Error(err)
-
 		}
 	}
 }
