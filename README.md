@@ -29,7 +29,7 @@ import (
 var log = logging.MustGetLogger("example")
 
 func main() {
-	// The false flag specifies that we don't want heartbeat messages.
+	// The false flag specifies that we want heartbeat messages.
 	stream, errStream := certstream.CertStreamEventStream(false)
 	for {
 		select {
