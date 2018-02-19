@@ -29,13 +29,16 @@ func CertStreamEventStream(skipHeartbeats bool) (chan jsonq.JsonQuery, chan erro
 				err = c.ReadJSON(&v)
 				if err != nil {
 					errStream <- errors.Wrap(err, "Error decoding json frame!")
+					c.Close()
+					break
 				}
 
 				jq := jsonq.NewQuery(v)
 
 				res, err := jq.String("message_type")
 				if err != nil {
-					errStream <- errors.Wrap(err, "Error creating jq object!")
+					errStream <- errors.Wrap(err, "Could not create jq object. Malformed json input recieved. Skipping.")
+					continue
 				}
 
 				if skipHeartbeats && res == "heartbeat" {
@@ -49,4 +52,3 @@ func CertStreamEventStream(skipHeartbeats bool) (chan jsonq.JsonQuery, chan erro
 
 	return outputStream, errStream
 }
-
