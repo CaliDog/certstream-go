@@ -2,7 +2,6 @@ package certstream
 
 import (
 	"time"
-
 	"github.com/gorilla/websocket"
 	"github.com/jmoiron/jsonq"
 	"github.com/pkg/errors"
