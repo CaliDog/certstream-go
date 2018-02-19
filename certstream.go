@@ -29,7 +29,7 @@ func CertStreamEventStream(skipHeartbeats bool) (chan jsonq.JsonQuery, chan erro
 				err = c.ReadJSON(&v)
 				if err != nil {
 					errStream <- errors.Wrap(err, "Error decoding json frame!")
-          c.Close()
+					c.Close()
 					break
 				}
 
