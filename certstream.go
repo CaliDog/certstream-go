@@ -2,9 +2,14 @@ package certstream
 
 import (
 	"time"
+
 	"github.com/gorilla/websocket"
 	"github.com/jmoiron/jsonq"
 	"github.com/pkg/errors"
+)
+
+const (
+	pingPeriod time.Duration = 15 * time.Second
 )
 
 func CertStreamEventStream(skipHeartbeats bool) (chan jsonq.JsonQuery, chan error) {
@@ -23,6 +28,22 @@ func CertStreamEventStream(skipHeartbeats bool) (chan jsonq.JsonQuery, chan erro
 
 			defer c.Close()
 			defer close(outputStream)
+
+			done := make(chan struct{})
+
+			go func() {
+				ticker := time.NewTicker(pingPeriod)
+				defer ticker.Stop()
+
+				for {
+					select {
+					case <-ticker.C:
+						c.WriteMessage(websocket.PingMessage, nil)
+					case <-done:
+						return
+					}
+				}
+			}()
 
 			for {
 				var v interface{}
@@ -47,6 +68,7 @@ func CertStreamEventStream(skipHeartbeats bool) (chan jsonq.JsonQuery, chan erro
 
 				outputStream <- *jq
 			}
+			close(done)
 		}
 	}()
 
