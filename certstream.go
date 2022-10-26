@@ -12,7 +12,7 @@ const (
 	pingPeriod time.Duration = 15 * time.Second
 )
 
-func CertStreamEventStream(skipHeartbeats bool) (chan jsonq.JsonQuery, chan error) {
+func CertStreamEventStreamURL(skipHeartbeats bool, url string) (chan jsonq.JsonQuery, chan error) {
 	outputStream := make(chan jsonq.JsonQuery)
 	errStream := make(chan error)
 
@@ -74,4 +74,8 @@ func CertStreamEventStream(skipHeartbeats bool) (chan jsonq.JsonQuery, chan erro
 	}()
 
 	return outputStream, errStream
+}
+
+func CertStreamEventStream(skipHeartbeats bool) (chan jsonq.JsonQuery, chan error) {
+	return CertStreamEventStreamURL(skipHeartbeats, "wss://certstream.calidog.io")
 }

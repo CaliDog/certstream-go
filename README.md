@@ -50,6 +50,42 @@ func main() {
 }
 ```
 
+## Custom Server
+If running your own version of [certstream-server](https://github.com/CaliDog/certstream-server), you can point
+your Go code to it using `CertStreamEventStreamURL`:
+```go
+package main
+
+import (
+	"github.com/CaliDog/certstream-go"
+	logging "github.com/op/go-logging"
+)
+
+var log = logging.MustGetLogger("example")
+
+func main() {
+	// The false flag specifies that we want heartbeat messages.
+    // The URL is the full path to the certstream-server websocket
+	stream, errStream := certstream.CertStreamEventStreamURL(false, "ws://127.0.0.1:4000/")
+	for {
+		select {
+			case jq := <-stream:
+				messageType, err := jq.String("message_type")
+
+				if err != nil{
+					log.Fatal("Error decoding jq string")
+				}
+
+				log.Info("Message type -> ", messageType)
+				log.Info("recv: ", jq)
+
+			case err := <-errStream:
+				log.Error(err)
+		}
+	}
+}
+```
+
 # Example data structure
 
 The data structure coming from CertStream looks like this:
