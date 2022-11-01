@@ -12,13 +12,13 @@ const (
 	pingPeriod time.Duration = 15 * time.Second
 )
 
-func CertStreamEventStream(skipHeartbeats bool) (chan jsonq.JsonQuery, chan error) {
+func CertStreamEventStreamURL(skipHeartbeats bool, url string) (chan jsonq.JsonQuery, chan error) {
 	outputStream := make(chan jsonq.JsonQuery)
 	errStream := make(chan error)
 
 	go func() {
 		for {
-			c, _, err := websocket.DefaultDialer.Dial("wss://certstream.calidog.io", nil)
+			c, _, err := websocket.DefaultDialer.Dial(url, nil)
 
 			if err != nil {
 				errStream <- errors.Wrap(err, "Error connecting to certstream! Sleeping a few seconds and reconnecting... ")
@@ -74,4 +74,8 @@ func CertStreamEventStream(skipHeartbeats bool) (chan jsonq.JsonQuery, chan erro
 	}()
 
 	return outputStream, errStream
+}
+
+func CertStreamEventStream(skipHeartbeats bool) (chan jsonq.JsonQuery, chan error) {
+	return CertStreamEventStreamURL(skipHeartbeats, "wss://certstream.calidog.io")
 }
